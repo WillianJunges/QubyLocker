@@ -2,6 +2,7 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { MfaBadge } from '@/components/MfaBadge';
+import { colors } from '@/theme/colors';
 import { PasswordEntry } from '@/types/PasswordEntry';
 
 type Props = {
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
   },
   iconText: {
     fontWeight: '700',
-    color: '#0369A1',
+    color: colors.primary,
   },
   info: {
     flex: 1,
@@ -50,9 +51,10 @@ const styles = StyleSheet.create({
   appName: {
     fontSize: 16,
     fontWeight: '600',
+    color: colors.text,
   },
   username: {
     fontSize: 13,
-    color: '#6B7280',
+    color: colors.textMuted,
   },
 });

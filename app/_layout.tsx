@@ -4,6 +4,7 @@ import * as ScreenCapture from 'expo-screen-capture';
 
 import { AuthProvider } from '@/auth/AuthContext';
 import { useAutoLock } from '@/auth/useAutoLock';
+import { colors } from '@/theme/colors';
 
 function AutoLockGuard() {
   useAutoLock();
@@ -22,7 +23,12 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <AutoLockGuard />
-      <Stack screenOptions={{ headerShown: false }} />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.background },
+        }}
+      />
     </AuthProvider>
   );
 }

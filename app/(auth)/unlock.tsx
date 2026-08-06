@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import { useAuth } from '@/auth/AuthContext';
 import { authenticate, isBiometricAvailable } from '@/auth/biometrics';
 import { getOrCreateMasterKey, hasMasterKey } from '@/crypto/keystore';
+import { colors } from '@/theme/colors';
 
 export default function UnlockScreen() {
   const { unlock } = useAuth();
@@ -76,6 +77,7 @@ export default function UnlockScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.background,
     justifyContent: 'center',
     paddingHorizontal: 24,
     gap: 16,
@@ -83,26 +85,27 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: '700',
+    color: colors.text,
     textAlign: 'center',
     marginBottom: 8,
   },
   subtitle: {
     textAlign: 'center',
-    color: '#6B7280',
+    color: colors.textMuted,
     marginBottom: 16,
   },
   button: {
-    backgroundColor: '#0369A1',
+    backgroundColor: colors.primary,
     borderRadius: 8,
     paddingVertical: 14,
     alignItems: 'center',
   },
   buttonText: {
-    color: 'white',
+    color: colors.primaryText,
     fontWeight: '600',
   },
   error: {
-    color: '#DC2626',
+    color: colors.danger,
     textAlign: 'center',
   },
 });

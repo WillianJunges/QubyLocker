@@ -1,6 +1,8 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
+import { colors } from '@/theme/colors';
+
 type Props = {
   value: string;
   onChangeText?: (text: string) => void;
@@ -25,9 +27,10 @@ export function PasswordField({ value, onChangeText, editable = true, revealed, 
         editable={editable}
         secureTextEntry={!revealed}
         placeholder="Senha"
+        placeholderTextColor={colors.textMuted}
       />
       <Pressable onPress={onToggleReveal} style={styles.toggle}>
-        <Text>{revealed ? 'Ocultar' : 'Ver Senha'}</Text>
+        <Text style={styles.toggleText}>{revealed ? 'Ocultar' : 'Ver Senha'}</Text>
       </Pressable>
     </View>
   );
@@ -42,13 +45,17 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#D1D5DB',
+    borderColor: colors.border,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
+    color: colors.text,
   },
   toggle: {
     paddingHorizontal: 10,
     paddingVertical: 10,
+  },
+  toggleText: {
+    color: colors.link,
   },
 });

@@ -6,6 +6,7 @@ import { PasswordField } from '@/components/PasswordField';
 import { decrypt, encrypt } from '@/crypto/cipher';
 import { getOrCreateMasterKey } from '@/crypto/keystore';
 import { deleteEntry, getEntryById, updateEntry } from '@/db/passwordRepository';
+import { colors } from '@/theme/colors';
 import { PasswordEntry } from '@/types/PasswordEntry';
 
 export default function EntryDetailScreen() {
@@ -87,8 +88,20 @@ export default function EntryDetailScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Editar Senha</Text>
 
-      <TextInput style={styles.input} placeholder="Nome do App/Site" value={appName} onChangeText={setAppName} />
-      <TextInput style={styles.input} placeholder="Usuário/Login" value={username} onChangeText={setUsername} />
+      <TextInput
+        style={styles.input}
+        placeholder="Nome do App/Site"
+        placeholderTextColor={colors.textMuted}
+        value={appName}
+        onChangeText={setAppName}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Usuário/Login"
+        placeholderTextColor={colors.textMuted}
+        value={username}
+        onChangeText={setUsername}
+      />
 
       {passwordLoaded ? (
         <PasswordField
@@ -104,11 +117,24 @@ export default function EntryDetailScreen() {
         </Pressable>
       )}
 
-      <TextInput style={styles.input} placeholder="URL (opcional)" value={url} onChangeText={setUrl} />
-      <TextInput style={styles.input} placeholder="Notas (opcional)" value={notes} onChangeText={setNotes} multiline />
+      <TextInput
+        style={styles.input}
+        placeholder="URL (opcional)"
+        placeholderTextColor={colors.textMuted}
+        value={url}
+        onChangeText={setUrl}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Notas (opcional)"
+        placeholderTextColor={colors.textMuted}
+        value={notes}
+        onChangeText={setNotes}
+        multiline
+      />
 
       <View style={styles.switchRow}>
-        <Text>MFA ativo</Text>
+        <Text style={styles.label}>MFA ativo</Text>
         <Switch value={mfaEnabled} onValueChange={setMfaEnabled} />
       </View>
 
@@ -133,6 +159,7 @@ export default function EntryDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.background,
     paddingTop: 60,
     paddingHorizontal: 16,
     gap: 12,
@@ -140,30 +167,35 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
+    color: colors.text,
     marginBottom: 8,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#D1D5DB',
+    borderColor: colors.border,
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
+    color: colors.text,
   },
   switchRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  label: {
+    color: colors.text,
+  },
   link: {
-    color: '#0369A1',
+    color: colors.link,
   },
   hint: {
-    color: '#6B7280',
+    color: colors.textMuted,
     fontSize: 12,
     textAlign: 'center',
   },
   button: {
-    backgroundColor: '#0369A1',
+    backgroundColor: colors.primary,
     borderRadius: 8,
     paddingVertical: 14,
     alignItems: 'center',
@@ -173,10 +205,10 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   buttonDanger: {
-    backgroundColor: '#DC2626',
+    backgroundColor: colors.danger,
   },
   buttonText: {
-    color: 'white',
+    color: colors.primaryText,
     fontWeight: '600',
   },
 });

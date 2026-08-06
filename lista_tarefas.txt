@@ -26,15 +26,32 @@ Decisões já fechadas (não vão virar tarefa separada, só aplicadas na tarefa
         editar, excluir.
       - Corrigir eventuais bugs encontrados nesse fluxo.
 
-[ ] 4. Rodar o app de verdade (development build)
-      - npx expo prebuild + npx expo run:android (ou emulador/dispositivo
-        conectado via USB).
-      - Validar navegação, biometria, criptografia e SQLite funcionando no
-        dispositivo real.
+[x] 4. Rodar o app de verdade (build via EAS)
+      - Descoberto no meio do caminho: o cliente de desenvolvimento do Expo
+        (dev-client) crasha na abertura porque ele mesmo exige permissão de
+        internet (recurso de descoberta automática de servidor Metro), sem
+        relação com nosso código. Primeiro contornamos com build "preview"
+        (zero internet sempre) — funcionou, app rodou estável no celular.
+      - Depois de ver que cada ajuste ia exigir rebuild na nuvem (~15-40min),
+        decidimos trocar de estratégia pra essa rodada de ajustes de UI:
+        app.json virou app.config.js com internet liberada SÓ no build
+        "development" (necessária só pro dev-client conectar no Metro via
+        USB) — o app final (preview/production) continua sem nenhuma
+        permissão de rede, sempre.
+      - Confirmado: app abre, navega, autentica por biometria, cria/lê do
+        SQLite, sem crashar.
 
-[ ] 5. Ajustes finais de UI (simples)
-      - Pequenos ajustes visuais (cores, espaçamento, ícone do app) — nível
+[ ] 5. Ajustes finais de UI
+      - Corrigir texto branco em fundo branco (provável "forçar modo escuro"
+        do MIUI invertendo cores de forma inconsistente) — definir cores
+        explícitas de fundo/texto em vez de depender do padrão do sistema.
+      - A lógica de adicionar/editar/listar senha já existe (Tarefa 3) — só
+        não deu pra testar ainda por causa do texto ilegível. Testar esse
+        fluxo de verdade assim que o contraste for corrigido.
+      - Demais ajustes visuais (cores, espaçamento, ícone do app) — nível
         básico, só para ficar agradável de usar no dia a dia.
+      - Testar via build "development" + Metro/USB (internet só nesse
+        build de teste, reload instantâneo sem rebuild a cada mudança).
 
 [ ] 6. Gerar o APK final assinado (EAS Build, perfil production)
       - eas build --profile production --platform android
