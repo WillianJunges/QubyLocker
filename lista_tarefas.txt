@@ -54,9 +54,11 @@ Decisões já fechadas (não vão virar tarefa separada, só aplicadas na tarefa
         senha nunca decifrava). Ciclo completo confirmado funcionando:
         login, criar, ver, editar, excluir senha.
 
-[ ] 6. Gerar o APK final assinado (EAS Build, perfil production)
+[x] 6. Gerar o APK final assinado (EAS Build, perfil production)
+      - Ajustes de última hora antes do build: exclusão passou a exigir só
+        biometria (sem opção de cair pro PIN do sistema); ícone do app
+        atualizado pra arte definitiva.
       - eas build --profile production --platform android
-      - Baixar o .apk gerado.
 
 [ ] 7. Instalar no celular e testar fora do ambiente de desenvolvimento
       - Sideload via USB/transferência.
@@ -71,4 +73,4 @@ Decisões já fechadas (não vão virar tarefa separada, só aplicadas na tarefa
         rede em lugar nenhum do código).
 
 ---
-Aguardando seu OK para iniciar a Tarefa 6.
+Aguardando seu OK para iniciar a Tarefa 7.
