@@ -47,8 +47,8 @@ export default function NewEntryScreen() {
       });
 
       router.back();
-    } catch {
-      setError('Não foi possível autenticar. Tente novamente.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Não foi possível salvar a senha.');
     }
   }
 

@@ -25,11 +25,20 @@ function bytesToHex(bytes: Uint8Array): string {
 const AUTHENTICATION_PROMPT = 'Confirme sua identidade para continuar';
 
 export async function getOrCreateMasterKey(): Promise<string> {
+  const alreadySetUp = await hasMasterKey();
+
   const existing = await SecureStore.getItemAsync(MASTER_KEY_ALIAS, {
     requireAuthentication: true,
     authenticationPrompt: AUTHENTICATION_PROMPT,
   });
   if (existing) return existing;
+
+  if (alreadySetUp) {
+    // A chave mestra já existe, mas não conseguimos lê-la agora (autenticação
+    // falhou/foi cancelada). NUNCA gerar uma nova aqui — isso trocaria a
+    // chave e tornaria todas as senhas já salvas indecifráveis para sempre.
+    throw new Error('Não foi possível acessar a chave mestra. Tente novamente.');
+  }
 
   const randomBytes = await Crypto.getRandomBytesAsync(32); // 256 bits
   const newKey = bytesToHex(randomBytes);

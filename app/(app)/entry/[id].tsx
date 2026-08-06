@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 
 import { PasswordField } from '@/components/PasswordField';
@@ -53,8 +53,8 @@ export default function EntryDetailScreen() {
       setPassword(plain);
       setPasswordLoaded(true);
       setPasswordRevealed(true);
-    } catch {
-      setError('Não foi possível autenticar. Tente novamente.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Não foi possível carregar a senha.');
     }
   }
 
@@ -82,15 +82,28 @@ export default function EntryDetailScreen() {
       });
 
       router.back();
-    } catch {
-      setError('Não foi possível autenticar. Tente novamente.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Não foi possível salvar as alterações.');
     }
   }
 
-  async function handleDelete() {
+  function handleDelete() {
     if (!entry) return;
-    await deleteEntry(entry.id);
-    router.back();
+    Alert.alert(
+      'Excluir senha',
+      `Tem certeza que deseja excluir "${entry.appName}"? Essa ação não pode ser desfeita.`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Excluir',
+          style: 'destructive',
+          onPress: async () => {
+            await deleteEntry(entry.id);
+            router.back();
+          },
+        },
+      ]
+    );
   }
 
   if (!entry) return null;

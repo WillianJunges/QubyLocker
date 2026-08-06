@@ -21,6 +21,10 @@ export function PasswordField({ value, onChangeText, editable = true, revealed, 
   return (
     <View style={styles.row}>
       <TextInput
+        // O Android às vezes não re-renderiza o campo ao alternar
+        // secureTextEntry dinamicamente — forçar remontagem com `key`
+        // garante que o texto realmente apareça/oculte.
+        key={revealed ? 'revealed' : 'hidden'}
         style={styles.input}
         value={value}
         onChangeText={onChangeText}
