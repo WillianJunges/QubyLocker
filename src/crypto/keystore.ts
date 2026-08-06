@@ -22,9 +22,12 @@ function bytesToHex(bytes: Uint8Array): string {
  * dispositivo (Android Keystore / iOS Keychain) — não existe PIN próprio do
  * app: quem autentica é sempre o sistema operacional.
  */
+const AUTHENTICATION_PROMPT = 'Confirme sua identidade para continuar';
+
 export async function getOrCreateMasterKey(): Promise<string> {
   const existing = await SecureStore.getItemAsync(MASTER_KEY_ALIAS, {
     requireAuthentication: true,
+    authenticationPrompt: AUTHENTICATION_PROMPT,
   });
   if (existing) return existing;
 
@@ -33,6 +36,7 @@ export async function getOrCreateMasterKey(): Promise<string> {
 
   await SecureStore.setItemAsync(MASTER_KEY_ALIAS, newKey, {
     requireAuthentication: true,
+    authenticationPrompt: AUTHENTICATION_PROMPT,
     keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
   });
   await SecureStore.setItemAsync(SETUP_MARKER_ALIAS, 'true');
