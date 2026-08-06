@@ -18,8 +18,16 @@ expo-env.d.ts
 *.key
 *.mobileprovision
 
+icon.jpg
+
 # Metro
 .metro-health-check*
+
+# personal drafts
+post_linkedin.txt
+
+# Claude Code local settings
+.claude/
 
 # debug
 npm-debug.*

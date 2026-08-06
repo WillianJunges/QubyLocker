@@ -60,17 +60,19 @@ Decisões já fechadas (não vão virar tarefa separada, só aplicadas na tarefa
         atualizado pra arte definitiva.
       - eas build --profile production --platform android
 
-[ ] 7. Instalar no celular e testar fora do ambiente de desenvolvimento
+[x] 7. Instalar no celular e testar fora do ambiente de desenvolvimento
       - Sideload via USB/transferência.
       - Testar app "de verdade" (fora do modo dev).
       - Conferir que o Android não lista nenhuma permissão de internet ao
         instalar.
+      - Confirmado pelo usuário: instalado, sem permissão de internet.
 
-[ ] 8. Teste final de segurança básica
+[x] 8. Teste final de segurança básica
       - Confirmar que o app bloqueia sozinho ao ir pra segundo plano.
       - Confirmar que prints/captura de tela são bloqueados nas telas do app.
       - Confirmar que os dados não saem do SQLite local (sem chamadas de
         rede em lugar nenhum do código).
+      - Confirmado pelo usuário: tudo passou como esperado.
 
 ---
-Aguardando seu OK para iniciar a Tarefa 7.
+PROJETO CONCLUÍDO — todas as 8 tarefas fechadas e validadas pelo usuário.
