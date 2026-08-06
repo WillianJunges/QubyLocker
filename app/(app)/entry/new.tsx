@@ -27,25 +27,29 @@ export default function NewEntryScreen() {
       return;
     }
 
-    const masterKey = await getOrCreateMasterKey();
-    const { cipher, iv, authTag } = encrypt(password, masterKey);
-    const now = Date.now();
+    try {
+      const masterKey = await getOrCreateMasterKey();
+      const { cipher, iv, authTag } = encrypt(password, masterKey);
+      const now = Date.now();
 
-    await insertEntry({
-      id: ExpoCrypto.randomUUID(),
-      appName,
-      username,
-      passwordCipher: cipher,
-      iv,
-      authTag,
-      url: url || undefined,
-      notes: notes || undefined,
-      mfaEnabled,
-      createdAt: now,
-      updatedAt: now,
-    });
+      await insertEntry({
+        id: ExpoCrypto.randomUUID(),
+        appName,
+        username,
+        passwordCipher: cipher,
+        iv,
+        authTag,
+        url: url || undefined,
+        notes: notes || undefined,
+        mfaEnabled,
+        createdAt: now,
+        updatedAt: now,
+      });
 
-    router.back();
+      router.back();
+    } catch {
+      setError('Não foi possível autenticar. Tente novamente.');
+    }
   }
 
   return (

@@ -22,6 +22,7 @@ export default function EntryDetailScreen() {
   const [password, setPassword] = useState('');
   const [passwordLoaded, setPasswordLoaded] = useState(false);
   const [passwordRevealed, setPasswordRevealed] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
@@ -41,39 +42,49 @@ export default function EntryDetailScreen() {
 
   async function handleLoadPassword() {
     if (!entry) return;
-    // Único ponto que exige biometria nesta tela: decifrar a senha guardada.
-    const masterKey = await getOrCreateMasterKey();
-    const plain = decrypt(
-      { cipher: entry.passwordCipher, iv: entry.iv, authTag: entry.authTag },
-      masterKey
-    );
-    setPassword(plain);
-    setPasswordLoaded(true);
-    setPasswordRevealed(true);
+    setError(null);
+    try {
+      // Único ponto que exige biometria nesta tela: decifrar a senha guardada.
+      const masterKey = await getOrCreateMasterKey();
+      const plain = decrypt(
+        { cipher: entry.passwordCipher, iv: entry.iv, authTag: entry.authTag },
+        masterKey
+      );
+      setPassword(plain);
+      setPasswordLoaded(true);
+      setPasswordRevealed(true);
+    } catch {
+      setError('Não foi possível autenticar. Tente novamente.');
+    }
   }
 
   async function handleSave() {
     // Sem a senha carregada não há o que re-cifrar com segurança — evita
     // sobrescrever a senha salva com uma string vazia.
     if (!entry || !passwordLoaded) return;
+    setError(null);
 
-    const masterKey = await getOrCreateMasterKey();
-    const { cipher, iv, authTag } = encrypt(password, masterKey);
+    try {
+      const masterKey = await getOrCreateMasterKey();
+      const { cipher, iv, authTag } = encrypt(password, masterKey);
 
-    await updateEntry({
-      ...entry,
-      appName,
-      username,
-      passwordCipher: cipher,
-      iv,
-      authTag,
-      url: url || undefined,
-      notes: notes || undefined,
-      mfaEnabled,
-      updatedAt: Date.now(),
-    });
+      await updateEntry({
+        ...entry,
+        appName,
+        username,
+        passwordCipher: cipher,
+        iv,
+        authTag,
+        url: url || undefined,
+        notes: notes || undefined,
+        mfaEnabled,
+        updatedAt: Date.now(),
+      });
 
-    router.back();
+      router.back();
+    } catch {
+      setError('Não foi possível autenticar. Tente novamente.');
+    }
   }
 
   async function handleDelete() {
@@ -148,6 +159,7 @@ export default function EntryDetailScreen() {
       {!passwordLoaded && (
         <Text style={styles.hint}>Carregue a senha acima antes de salvar alterações.</Text>
       )}
+      {error && <Text style={styles.error}>{error}</Text>}
 
       <Pressable style={[styles.button, styles.buttonDanger]} onPress={handleDelete}>
         <Text style={styles.buttonText}>Excluir</Text>
@@ -192,6 +204,10 @@ const styles = StyleSheet.create({
   hint: {
     color: colors.textMuted,
     fontSize: 12,
+    textAlign: 'center',
+  },
+  error: {
+    color: colors.danger,
     textAlign: 'center',
   },
   button: {
