@@ -4,14 +4,17 @@ import * as ScreenCapture from 'expo-screen-capture';
 
 import { AuthProvider } from '@/auth/AuthContext';
 import { useAutoLock } from '@/auth/useAutoLock';
-import { colors } from '@/theme/colors';
+import { ThemeToggleButton } from '@/components/ThemeToggleButton';
+import { ThemeProvider, useTheme } from '@/theme/ThemeContext';
 
 function AutoLockGuard() {
   useAutoLock();
   return null;
 }
 
-export default function RootLayout() {
+function AppContent() {
+  const { colors } = useTheme();
+
   useEffect(() => {
     // Impede prints/gravações de tela em todo o app (equivalente ao FLAG_SECURE).
     ScreenCapture.preventScreenCaptureAsync();
@@ -25,6 +28,7 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <AutoLockGuard />
+      <ThemeToggleButton />
       <Stack
         screenOptions={{
           headerShown: false,
@@ -32,5 +36,13 @@ export default function RootLayout() {
         }}
       />
     </AuthProvider>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }

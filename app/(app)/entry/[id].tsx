@@ -2,15 +2,19 @@ import { useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 
+import { authenticate } from '@/auth/biometrics';
 import { PasswordField } from '@/components/PasswordField';
 import { decrypt, encrypt } from '@/crypto/cipher';
 import { getOrCreateMasterKey } from '@/crypto/keystore';
 import { deleteEntry, getEntryById, updateEntry } from '@/db/passwordRepository';
-import { colors } from '@/theme/colors';
+import { ThemeColors } from '@/theme/colors';
+import { useTheme } from '@/theme/ThemeContext';
 import { PasswordEntry } from '@/types/PasswordEntry';
 
 export default function EntryDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const [entry, setEntry] = useState<PasswordEntry | null>(null);
 
   const [appName, setAppName] = useState('');
@@ -98,6 +102,12 @@ export default function EntryDetailScreen() {
           text: 'Excluir',
           style: 'destructive',
           onPress: async () => {
+            setError(null);
+            const ok = await authenticate('Insira a digital para excluir');
+            if (!ok) {
+              setError('Não foi possível autenticar. Exclusão cancelada.');
+              return;
+            }
             await deleteEntry(entry.id);
             router.back();
           },
@@ -181,63 +191,65 @@ export default function EntryDetailScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-    paddingTop: 60,
-    paddingHorizontal: 16,
-    gap: 12,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: colors.text,
-    marginBottom: 8,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    color: colors.text,
-  },
-  switchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  label: {
-    color: colors.text,
-  },
-  link: {
-    color: colors.link,
-  },
-  hint: {
-    color: colors.textMuted,
-    fontSize: 12,
-    textAlign: 'center',
-  },
-  error: {
-    color: colors.danger,
-    textAlign: 'center',
-  },
-  button: {
-    backgroundColor: colors.primary,
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  buttonDisabled: {
-    opacity: 0.5,
-  },
-  buttonDanger: {
-    backgroundColor: colors.danger,
-  },
-  buttonText: {
-    color: colors.primaryText,
-    fontWeight: '600',
-  },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingTop: 60,
+      paddingHorizontal: 16,
+      gap: 12,
+    },
+    title: {
+      fontSize: 22,
+      fontWeight: '700',
+      color: colors.text,
+      marginBottom: 8,
+    },
+    input: {
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 8,
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      color: colors.text,
+    },
+    switchRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    label: {
+      color: colors.text,
+    },
+    link: {
+      color: colors.link,
+    },
+    hint: {
+      color: colors.textMuted,
+      fontSize: 12,
+      textAlign: 'center',
+    },
+    error: {
+      color: colors.danger,
+      textAlign: 'center',
+    },
+    button: {
+      backgroundColor: colors.primary,
+      borderRadius: 8,
+      paddingVertical: 14,
+      alignItems: 'center',
+      marginTop: 8,
+    },
+    buttonDisabled: {
+      opacity: 0.5,
+    },
+    buttonDanger: {
+      backgroundColor: colors.danger,
+    },
+    buttonText: {
+      color: colors.primaryText,
+      fontWeight: '600',
+    },
+  });
+}

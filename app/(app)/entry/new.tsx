@@ -7,10 +7,13 @@ import { PasswordField } from '@/components/PasswordField';
 import { encrypt } from '@/crypto/cipher';
 import { getOrCreateMasterKey } from '@/crypto/keystore';
 import { insertEntry } from '@/db/passwordRepository';
-import { colors } from '@/theme/colors';
+import { ThemeColors } from '@/theme/colors';
+import { useTheme } from '@/theme/ThemeContext';
 import { validateNewEntry } from '@/utils/validators';
 
 export default function NewEntryScreen() {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const [appName, setAppName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -107,48 +110,50 @@ export default function NewEntryScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-    paddingTop: 60,
-    paddingHorizontal: 16,
-    gap: 12,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: colors.text,
-    marginBottom: 8,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    color: colors.text,
-  },
-  switchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  label: {
-    color: colors.text,
-  },
-  error: {
-    color: colors.danger,
-  },
-  button: {
-    backgroundColor: colors.primary,
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  buttonText: {
-    color: colors.primaryText,
-    fontWeight: '600',
-  },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingTop: 60,
+      paddingHorizontal: 16,
+      gap: 12,
+    },
+    title: {
+      fontSize: 22,
+      fontWeight: '700',
+      color: colors.text,
+      marginBottom: 8,
+    },
+    input: {
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 8,
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      color: colors.text,
+    },
+    switchRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    label: {
+      color: colors.text,
+    },
+    error: {
+      color: colors.danger,
+    },
+    button: {
+      backgroundColor: colors.primary,
+      borderRadius: 8,
+      paddingVertical: 14,
+      alignItems: 'center',
+      marginTop: 8,
+    },
+    buttonText: {
+      color: colors.primaryText,
+      fontWeight: '600',
+    },
+  });
+}

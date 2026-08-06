@@ -4,10 +4,13 @@ import { router } from 'expo-router';
 import { EntryListItem } from '@/components/EntryListItem';
 import { FloatingAddButton } from '@/components/FloatingAddButton';
 import { usePasswordEntries } from '@/hooks/usePasswordEntries';
-import { colors } from '@/theme/colors';
+import { ThemeColors } from '@/theme/colors';
+import { useTheme } from '@/theme/ThemeContext';
 
 export default function DashboardScreen() {
   const { entries, loading } = usePasswordEntries();
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
 
   return (
     <View style={styles.container}>
@@ -30,22 +33,24 @@ export default function DashboardScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-    paddingTop: 60,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: colors.text,
-    paddingHorizontal: 16,
-    marginBottom: 12,
-  },
-  empty: {
-    textAlign: 'center',
-    color: colors.textMuted,
-    marginTop: 40,
-  },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+      paddingTop: 60,
+    },
+    title: {
+      fontSize: 22,
+      fontWeight: '700',
+      color: colors.text,
+      paddingHorizontal: 16,
+      marginBottom: 12,
+    },
+    empty: {
+      textAlign: 'center',
+      color: colors.textMuted,
+      marginTop: 40,
+    },
+  });
+}

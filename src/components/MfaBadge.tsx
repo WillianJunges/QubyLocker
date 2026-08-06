@@ -1,7 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { ThemeColors } from '@/theme/colors';
+import { useTheme } from '@/theme/ThemeContext';
+
 export function MfaBadge({ visible }: { visible: boolean }) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   if (!visible) return null;
 
   return (
@@ -11,16 +17,18 @@ export function MfaBadge({ visible }: { visible: boolean }) {
   );
 }
 
-const styles = StyleSheet.create({
-  badge: {
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-    backgroundColor: '#DCFCE7',
-  },
-  text: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: '#166534',
-  },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    badge: {
+      paddingHorizontal: 6,
+      paddingVertical: 2,
+      borderRadius: 4,
+      backgroundColor: colors.successBg,
+    },
+    text: {
+      fontSize: 10,
+      fontWeight: '700',
+      color: colors.successText,
+    },
+  });
+}

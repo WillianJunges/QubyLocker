@@ -1,7 +1,8 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { colors } from '@/theme/colors';
+import { ThemeColors } from '@/theme/colors';
+import { useTheme } from '@/theme/ThemeContext';
 
 type Props = {
   value: string;
@@ -18,6 +19,9 @@ type Props = {
  * de passar o valor pra cá).
  */
 export function PasswordField({ value, onChangeText, editable = true, revealed, onToggleReveal }: Props) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   return (
     <View style={styles.row}>
       <TextInput
@@ -40,26 +44,28 @@ export function PasswordField({ value, onChangeText, editable = true, revealed, 
   );
 }
 
-const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  input: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    color: colors.text,
-  },
-  toggle: {
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-  },
-  toggleText: {
-    color: colors.link,
-  },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
+    input: {
+      flex: 1,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 8,
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      color: colors.text,
+    },
+    toggle: {
+      paddingHorizontal: 10,
+      paddingVertical: 10,
+    },
+    toggleText: {
+      color: colors.link,
+    },
+  });
+}

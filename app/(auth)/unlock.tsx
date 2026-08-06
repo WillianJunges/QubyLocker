@@ -5,10 +5,13 @@ import { router } from 'expo-router';
 import { useAuth } from '@/auth/AuthContext';
 import { authenticate, isBiometricAvailable } from '@/auth/biometrics';
 import { getOrCreateMasterKey, hasMasterKey } from '@/crypto/keystore';
-import { colors } from '@/theme/colors';
+import { ThemeColors } from '@/theme/colors';
+import { useTheme } from '@/theme/ThemeContext';
 
 export default function UnlockScreen() {
   const { unlock } = useAuth();
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const [error, setError] = useState<string | null>(null);
   const [checkingSetup, setCheckingSetup] = useState(true);
   const [isFirstAccess, setIsFirstAccess] = useState(false);
@@ -55,7 +58,7 @@ export default function UnlockScreen() {
   if (checkingSetup) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator />
+        <ActivityIndicator color={colors.primary} />
       </View>
     );
   }
@@ -79,38 +82,40 @@ export default function UnlockScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-    gap: 16,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: colors.text,
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  subtitle: {
-    textAlign: 'center',
-    color: colors.textMuted,
-    marginBottom: 16,
-  },
-  button: {
-    backgroundColor: colors.primary,
-    borderRadius: 8,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: colors.primaryText,
-    fontWeight: '600',
-  },
-  error: {
-    color: colors.danger,
-    textAlign: 'center',
-  },
-});
+function createStyles(colors: ThemeColors) {
+  return StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: colors.background,
+      justifyContent: 'center',
+      paddingHorizontal: 24,
+      gap: 16,
+    },
+    title: {
+      fontSize: 28,
+      fontWeight: '700',
+      color: colors.text,
+      textAlign: 'center',
+      marginBottom: 8,
+    },
+    subtitle: {
+      textAlign: 'center',
+      color: colors.textMuted,
+      marginBottom: 16,
+    },
+    button: {
+      backgroundColor: colors.primary,
+      borderRadius: 8,
+      paddingVertical: 14,
+      alignItems: 'center',
+    },
+    buttonText: {
+      color: colors.primaryText,
+      fontWeight: '600',
+    },
+    error: {
+      color: colors.danger,
+      textAlign: 'center',
+    },
+  });
+}
