@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, Switch, Text, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
-import { v4 as uuidv4 } from 'uuid';
+import * as ExpoCrypto from 'expo-crypto';
 
 import { PasswordField } from '@/components/PasswordField';
 import { encrypt } from '@/crypto/cipher';
@@ -32,7 +32,7 @@ export default function NewEntryScreen() {
     const now = Date.now();
 
     await insertEntry({
-      id: uuidv4(),
+      id: ExpoCrypto.randomUUID(),
       appName,
       username,
       passwordCipher: cipher,
