@@ -16,7 +16,9 @@ export default function RootLayout() {
     // Impede prints/gravações de tela em todo o app (equivalente ao FLAG_SECURE).
     ScreenCapture.preventScreenCaptureAsync();
     return () => {
-      ScreenCapture.allowScreenCaptureAsync();
+      // Em recarregamentos durante o desenvolvimento (Fast Refresh) a activity
+      // pode já não existir mais quando esse cleanup roda — não é um erro real.
+      ScreenCapture.allowScreenCaptureAsync().catch(() => {});
     };
   }, []);
 

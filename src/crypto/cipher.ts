@@ -1,9 +1,16 @@
 import CryptoJS from 'crypto-js';
+import * as ExpoCrypto from 'expo-crypto';
 
 // Decisão definitiva: crypto-js não implementa AES-GCM (só CBC/CTR/CFB/OFB/ECB,
 // sem tag de autenticação), então usamos Encrypt-then-MAC como equivalente:
 // AES-256-CBC (confidencialidade) + HMAC-SHA256 sobre (iv + ciphertext) (integridade).
 // Suficiente para um projeto pessoal offline — sem necessidade de trocar de lib.
+//
+// O gerador de aleatoriedade do próprio crypto-js (WordArray.random) depende de
+// `crypto.getRandomValues` (browser) ou `require('crypto')` (Node) — nenhum dos
+// dois existe no React Native, então ele lança erro em runtime. Por isso o IV é
+// gerado via expo-crypto (RNG nativo seguro) e só convertido pro formato do
+// crypto-js depois.
 
 export type EncryptedPayload = {
   cipher: string; // base64
@@ -18,7 +25,7 @@ function deriveHmacKey(masterKeyHex: string): CryptoJS.lib.WordArray {
 
 export function encrypt(plainText: string, masterKeyHex: string): EncryptedPayload {
   const key = CryptoJS.enc.Hex.parse(masterKeyHex);
-  const iv = CryptoJS.lib.WordArray.random(16);
+  const iv = CryptoJS.lib.WordArray.create(ExpoCrypto.getRandomBytes(16));
 
   const encrypted = CryptoJS.AES.encrypt(plainText, key, {
     iv,
