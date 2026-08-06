@@ -1,0 +1,47 @@
+# ROTEIRO DE DESENVOLVIMENTO: QubyLocker (Android)
+
+Este guia descreve os passos necessários para criar seu próprio gerenciador de senhas offline e seguro.
+
+---
+
+## 1. PREPARAÇÃO DO AMBIENTE
+- Instalar Android Studio.
+- Linguagem recomendada: Kotlin.
+- UI Toolkit: Jetpack Compose (moderno e simples).
+
+## 2. ARQUITETURA E SEGURANÇA (O Coração do App)
+- **Banco de Dados:** Usar Room Database.
+- **Criptografia:** NUNCA salve senhas em texto puro. Use a biblioteca "Jetpack Security" para Criptografia AES-256 GCM.
+- **Android Keystore:** Armazenar as chaves de criptografia no hardware do dispositivo para que não possam ser extraídas.
+
+## 3. FLUXO DE TELAS (UI)
+- **Tela de Acesso:** Campo de PIN/Senha + Botão de Biometria.
+- **Tela Principal (Dashboard):**
+    - Lista de itens (Ícone, Nome do App, Usuário).
+    - Indicador visual se tem MFA ativo.
+    - Botão flutuante "+" para adicionar.
+- **Tela de Detalhes/Edição:**
+    - Campos: Nome do App, Login, Senha, URL, Notas, Toggle MFA.
+    - O campo de senha deve vir oculto (***) por padrão.
+    - Botão "Ver Senha" (dispara autenticação biométrica).
+
+## 4. PASSO A PASSO DA IMPLEMENTAÇÃO
+1. **Configurar o Projeto:** Criar projeto "Empty Compose Activity".
+2. **Implementar Biometria:** Usar `BiometricPrompt` API para validar o usuário na entrada e antes de revelar senhas.
+3. **Modelar Dados:** Criar uma classe `PasswordEntry` com os campos necessários.
+4. **Segurança de Dados:** Implementar uma camada que criptografa a senha antes de salvar no Room e descriptografa apenas na memória ao visualizar.
+5. **UI de Lista:** Criar o componente de lista usando `LazyColumn`.
+6. **UI de Cadastro:** Criar formulário com validação simples.
+
+## 5. RECURSOS ADICIONAIS (Dicas de Ouro)
+- **Bloqueio Automático:** Configurar o app para bloquear sempre que for para o background (OnPause/OnStop).
+- **Proibir Prints:** Adicionar `FLAG_SECURE` na Janela do Android para impedir prints e visualização no seletor de apps recentes.
+- **Sem Internet:** Não declare a permissão de INTERNET no AndroidManifest.xml para garantir que seus dados nunca saiam do celular.
+
+## 6. TESTES E DISTRIBUIÇÃO
+- Testar o fluxo de criptografia (salvar e ler).
+- Gerar o APK assinado (Build > Generate Signed Bundle / APK).
+- Instalar no seu celular via USB.
+
+---
+Documento gerado para o projeto QubyLocker.

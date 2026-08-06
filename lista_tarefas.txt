@@ -1,0 +1,56 @@
+LISTA DE TAREFAS — QubyLocker (Expo/React Native)
+Regra combinada: uma tarefa por vez. Após concluir cada uma, aviso e aguardo
+sua autorização antes de seguir para a próxima.
+
+Decisões já fechadas (não vão virar tarefa separada, só aplicadas na tarefa 1):
+- Autenticação: biometria/PIN nativo do celular (sem PIN próprio do app).
+- Criptografia: mantém crypto-js, AES-256-CBC + HMAC-SHA256 (Encrypt-then-MAC).
+  Decisão final, sem necessidade de trocar de lib — projeto pessoal, não comercial.
+
+[x] 1. Trocar autenticação por biometria/PIN nativo do celular
+      - Remover campo de PIN customizado da tela de desbloqueio.
+      - Unlock passa a usar só expo-local-authentication (biometria com
+        fallback automático para PIN/padrão/senha do próprio Android).
+      - Remover os TODOs de hash de PIN em src/crypto/keystore.ts (não se
+        aplica mais).
+      - Finalizar comentário do cipher.ts como decisão definitiva (não mais
+        "pendente").
+
+[x] 2. Fluxo de primeiro acesso
+      - Detectar se é a primeira vez que o app abre (ainda não existe chave
+        mestra) e ajustar a tela de desbloqueio para esse caso (ex: mensagem
+        diferente, sem tentar decifrar nada que não existe).
+
+[x] 3. Revisar e testar as telas de cadastro/edição de senha
+      - Conferir ponta a ponta: criar senha nova, listar, abrir detalhes,
+        editar, excluir.
+      - Corrigir eventuais bugs encontrados nesse fluxo.
+
+[ ] 4. Rodar o app de verdade (development build)
+      - npx expo prebuild + npx expo run:android (ou emulador/dispositivo
+        conectado via USB).
+      - Validar navegação, biometria, criptografia e SQLite funcionando no
+        dispositivo real.
+
+[ ] 5. Ajustes finais de UI (simples)
+      - Pequenos ajustes visuais (cores, espaçamento, ícone do app) — nível
+        básico, só para ficar agradável de usar no dia a dia.
+
+[ ] 6. Gerar o APK final assinado (EAS Build, perfil production)
+      - eas build --profile production --platform android
+      - Baixar o .apk gerado.
+
+[ ] 7. Instalar no celular e testar fora do ambiente de desenvolvimento
+      - Sideload via USB/transferência.
+      - Testar app "de verdade" (fora do modo dev).
+      - Conferir que o Android não lista nenhuma permissão de internet ao
+        instalar.
+
+[ ] 8. Teste final de segurança básica
+      - Confirmar que o app bloqueia sozinho ao ir pra segundo plano.
+      - Confirmar que prints/captura de tela são bloqueados nas telas do app.
+      - Confirmar que os dados não saem do SQLite local (sem chamadas de
+        rede em lugar nenhum do código).
+
+---
+Aguardando seu OK para iniciar a Tarefa 4.
