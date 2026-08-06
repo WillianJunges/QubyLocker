@@ -31,20 +31,25 @@ export default function UnlockScreen() {
       return;
     }
 
-    // expo-local-authentication usa a biometria do aparelho e cai automaticamente
-    // para o PIN/padrão/senha do Android caso a biometria falhe ou não esteja disponível.
-    const promptMessage = isFirstAccess ? 'Confirme sua identidade para configurar o QubyLocker' : 'Desbloqueie o QubyLocker';
-    const ok = await authenticate(promptMessage);
-    if (!ok) return;
+    try {
+      if (isFirstAccess) {
+        // Criar a chave mestra já pede biometria/PIN por conta própria
+        // (SecureStore com requireAuthentication) — pedir de novo aqui em
+        // cima seria uma segunda autenticação redundante em sequência.
+        await getOrCreateMasterKey();
+      } else {
+        // expo-local-authentication usa a biometria do aparelho e cai
+        // automaticamente para o PIN/padrão/senha do Android caso a
+        // biometria falhe ou não esteja disponível.
+        const ok = await authenticate('Desbloqueie o QubyLocker');
+        if (!ok) return;
+      }
 
-    if (isFirstAccess) {
-      // Gera e guarda a chave mestra logo na primeira configuração, já
-      // amarrada à mesma autenticação que acabou de ser feita.
-      await getOrCreateMasterKey();
+      unlock();
+      router.replace('/(app)/dashboard');
+    } catch {
+      setError('Não foi possível autenticar. Tente novamente.');
     }
-
-    unlock();
-    router.replace('/(app)/dashboard');
   }
 
   if (checkingSetup) {

@@ -34,7 +34,10 @@ export function encrypt(plainText: string, masterKeyHex: string): EncryptedPaylo
   });
 
   const cipherText = encrypted.ciphertext;
-  const authTag = CryptoJS.HmacSHA256(iv.concat(cipherText), deriveHmacKey(masterKeyHex));
+  // iv.concat() MUTA o WordArray original (é destrutivo, não retorna uma cópia) —
+  // por isso clonamos antes, senão o `iv` guardado abaixo já viria corrompido
+  // (misturado com o próprio ciphertext).
+  const authTag = CryptoJS.HmacSHA256(iv.clone().concat(cipherText), deriveHmacKey(masterKeyHex));
 
   return {
     cipher: CryptoJS.enc.Base64.stringify(cipherText),
@@ -48,7 +51,9 @@ export function decrypt(payload: EncryptedPayload, masterKeyHex: string): string
   const iv = CryptoJS.enc.Base64.parse(payload.iv);
   const cipherText = CryptoJS.enc.Base64.parse(payload.cipher);
 
-  const expectedTag = CryptoJS.HmacSHA256(iv.concat(cipherText), deriveHmacKey(masterKeyHex));
+  // Mesmo cuidado aqui: clonar antes de concat para não corromper o `iv`
+  // usado logo abaixo no AES.decrypt.
+  const expectedTag = CryptoJS.HmacSHA256(iv.clone().concat(cipherText), deriveHmacKey(masterKeyHex));
   const expectedTagBase64 = CryptoJS.enc.Base64.stringify(expectedTag);
 
   if (expectedTagBase64 !== payload.authTag) {
