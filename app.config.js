@@ -18,10 +18,8 @@ module.exports = {
     android: {
       package: 'com.willianjunges.qubylocker',
       adaptiveIcon: {
-        backgroundColor: '#E6F4FE',
+        backgroundColor: '#0284FC',
         foregroundImage: './assets/android-icon-foreground.png',
-        backgroundImage: './assets/android-icon-background.png',
-        monochromeImage: './assets/android-icon-monochrome.png',
       },
       predictiveBackGestureEnabled: false,
       permissions: ['android.permission.USE_BIOMETRIC', 'android.permission.USE_FINGERPRINT'],
