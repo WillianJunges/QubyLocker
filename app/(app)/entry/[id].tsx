@@ -103,7 +103,7 @@ export default function EntryDetailScreen() {
           style: 'destructive',
           onPress: async () => {
             setError(null);
-            const ok = await authenticate('Insira a digital para excluir');
+            const ok = await authenticate('Insira a digital para excluir', { biometricOnly: true });
             if (!ok) {
               setError('Não foi possível autenticar. Exclusão cancelada.');
               return;

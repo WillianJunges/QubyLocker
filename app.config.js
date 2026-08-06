@@ -18,7 +18,7 @@ module.exports = {
     android: {
       package: 'com.willianjunges.qubylocker',
       adaptiveIcon: {
-        backgroundColor: '#0284FC',
+        backgroundColor: '#0472FD',
         foregroundImage: './assets/android-icon-foreground.png',
       },
       predictiveBackGestureEnabled: false,
