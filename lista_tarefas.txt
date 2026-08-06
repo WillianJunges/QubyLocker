@@ -41,17 +41,18 @@ Decisões já fechadas (não vão virar tarefa separada, só aplicadas na tarefa
       - Confirmado: app abre, navega, autentica por biometria, cria/lê do
         SQLite, sem crashar.
 
-[ ] 5. Ajustes finais de UI
-      - Corrigir texto branco em fundo branco (provável "forçar modo escuro"
-        do MIUI invertendo cores de forma inconsistente) — definir cores
-        explícitas de fundo/texto em vez de depender do padrão do sistema.
-      - A lógica de adicionar/editar/listar senha já existe (Tarefa 3) — só
-        não deu pra testar ainda por causa do texto ilegível. Testar esse
-        fluxo de verdade assim que o contraste for corrigido.
-      - Demais ajustes visuais (cores, espaçamento, ícone do app) — nível
-        básico, só para ficar agradável de usar no dia a dia.
-      - Testar via build "development" + Metro/USB (internet só nesse
-        build de teste, reload instantâneo sem rebuild a cada mudança).
+[x] 5. Ajustes finais de UI
+      - Corrigido texto branco em fundo branco (paleta de cores central,
+        cores explícitas em toda tela/componente).
+      - Ícone do app trocado pela arte enviada.
+      - Testado via build "development" + Metro/USB e encontrados/corrigidos
+        vários bugs reais no caminho: crypto-js não gera aleatoriedade no RN
+        (IV e UUID), diálogo de biometria sem mensagem, rotação silenciosa
+        da chave mestra quando a leitura falhava, campo de senha não
+        atualizando visualmente, exclusão sem confirmação, e o bug principal
+        — CryptoJS WordArray.concat() mutando o IV original (por isso a
+        senha nunca decifrava). Ciclo completo confirmado funcionando:
+        login, criar, ver, editar, excluir senha.
 
 [ ] 6. Gerar o APK final assinado (EAS Build, perfil production)
       - eas build --profile production --platform android
@@ -70,4 +71,4 @@ Decisões já fechadas (não vão virar tarefa separada, só aplicadas na tarefa
         rede em lugar nenhum do código).
 
 ---
-Aguardando seu OK para iniciar a Tarefa 4.
+Aguardando seu OK para iniciar a Tarefa 6.
